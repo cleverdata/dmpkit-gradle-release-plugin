@@ -1,0 +1,38 @@
+ext {
+
+    versions = [
+        gradleGit: '1.5.0',
+        jacoco: '0.7.7.201606060606',
+        hamcrest: '2.0.0.0',
+        testng: '6.9.6'
+    ]
+
+    libs = [
+        external: [
+            /***********************************************************************************************************
+            *                                        SUPPORT DEPS                                                      *
+            ***********************************************************************************************************/
+            gradleApi: dependencies.gradleApi(),
+            gradleGroovy: dependencies.localGroovy(),
+            gradleGit: "org.ajoberstar:gradle-git:${versions.gradleGit}",
+
+            /***********************************************************************************************************
+            *                                        TEST DEPS                                                         *
+            ***********************************************************************************************************/
+            hamcrest: "org.hamcrest:java-hamcrest:${versions.hamcrest}",
+            testng: "org.testng:testng:${versions.testng}",
+            gradleTestKit: dependencies.gradleTestKit(),
+
+            /***********************************************************************************************************
+            *                                        CHECK DEPS                                                        *
+            ***********************************************************************************************************/
+            jacoco: [
+                "org.jacoco:org.jacoco.core:${versions.jacoco}",
+                "org.jacoco:org.jacoco.ant:${versions.jacoco}",
+                "org.jacoco:org.jacoco.report:${versions.jacoco}"
+            ],
+            jacocoAgent: "org.jacoco:org.jacoco.agent:${versions.jacoco}"
+        ]
+    ]
+
+}

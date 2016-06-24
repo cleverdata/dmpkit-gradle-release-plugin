@@ -1,0 +1,51 @@
+ext {
+
+    repos = [
+        credentials: {
+            username mavenUser
+            password mavenPassword
+        }
+    ]
+    repos += [
+        publish: [
+            local: {
+                mavenLocal()
+            },
+            release: {
+                maven {
+                    url 'http://devtools1.1dmp.ru/artifactory/libs-release-local'
+                    credentials repos.credentials
+                }
+            },
+            snapshot: {
+                maven {
+                    url 'http://devtools1.1dmp.ru/artifactory/libs-snapshot-local'
+                    credentials repos.credentials
+                }
+            }
+        ],
+        resolve: [
+            local: {
+                mavenLocal()
+            },
+            release: {
+                maven {
+                    url 'http://devtools1.1dmp.ru/artifactory/libs-release'
+                    credentials repos.credentials
+                }
+            },
+            snapshot: {
+                maven {
+                    url 'http://devtools1.1dmp.ru/artifactory/libs-snapshot'
+                    credentials repos.credentials
+                }
+            }
+        ]
+    ]
+
+    // group all the resolve repository closures together
+    repos.resolve.all = repos.resolve.values().inject() { acc, repo -> acc << repo }
+    // smart publication that detects whether it's necessary to publish into snapshot or release repo
+    repos.publish.smart = project.version.endsWith('-SNAPSHOT') ? repos.publish.snapshot : repos.publish.release
+
+}

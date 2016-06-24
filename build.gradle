@@ -1,0 +1,178 @@
+import groovy.io.FileType
+
+buildscript {
+    apply from: 'libraries.gradle'
+    apply from: 'repositories.gradle'
+    repositories repos.resolve.all
+}
+
+ext {
+    meta = [
+        buildBy: System.getProperty('user.name'),
+        createdBy: "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
+        orgName: 'CleverData Inc.',
+        orgUrl: 'http://www.cleverdata.ru',
+        projectGroup: 'ru.cleverdata.dmpkit.gradle.plugin',
+    ]
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java-gradle-plugin' // make gradle's testkit happy
+apply plugin: 'maven-publish'
+apply plugin: 'idea'
+apply plugin: 'jacoco'
+
+repositories repos.resolve.all
+dependencies {
+    compile libs.external.gradleApi
+    compile libs.external.gradleGroovy
+    compile libs.external.gradleGit
+
+    testCompile libs.external.hamcrest
+    testCompile libs.external.testng
+    testCompile libs.external.gradleTestKit
+
+    jacocoAnt libs.external.jacoco
+    jacocoAgent libs.external.jacocoAgent
+}
+
+// apply plugin to itself
+def scriptEngine = new GroovyScriptEngine(
+    sourceSets.main.allSource.srcDirs as String[],
+    new URLClassLoader(configurations.runtime.collect { it.toURI().toURL() } as URL[], buildscript.classLoader)
+)
+sourceSets.main.allSource.srcDirs.each { File srcDir ->
+    if (srcDir.exists()) {
+        srcDir.traverse(type: FileType.FILES, nameFilter: ~/.*Plugin\.groovy/) {
+            String pluginPath = srcDir.toPath().relativize(it.toPath()).toString()
+            apply plugin: scriptEngine.loadScriptByName(pluginPath)
+        }
+    }
+}
+
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+        vcs = 'Git'
+    }
+    module {
+        name = project.name
+    }
+}
+
+group meta.projectGroup
+description 'CLEVERDATA :: DMPKIT :: GRADLE :: PLUGIN :: RELEASE'
+
+defaultTasks 'build'
+buildDir 'target'
+
+model {
+    publishing {
+        publications {
+            pluginMaven {
+                artifact sourceJar {
+                    classifier 'sources'
+                }
+            }
+        }
+        repositories repos.publish.smart
+    }
+}
+
+tasks.withType(GroovyCompile) {
+    options.encoding = 'UTF-8'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+task sourceJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+artifacts.archives sourceJar
+
+configurations {
+    itestCompile.extendsFrom testCompile
+    itestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+    itest {
+        compileClasspath += main.output + test.output + configurations.itestCompile
+        runtimeClasspath += main.output + test.output + configurations.itestRuntime
+        output.classesDir = test.output.classesDir
+        output.resourcesDir = test.output.resourcesDir
+    }
+}
+
+test {
+    useTestNG()
+    testLogging {
+        showCauses true
+        showExceptions true
+        showStackTraces true
+        showStandardStreams true
+    }
+    include '**/*Test.class'
+}
+
+task itest(type: Test) {
+    description 'Runs the integration tests'
+    useTestNG()
+    testLogging {
+        showCauses true
+        showExceptions true
+        showStackTraces true
+        showStandardStreams true
+    }
+
+    // change reporting folders for integration tests to prevent conflicts and overwrites of unit tests reports
+    reports {
+        junitXml.destination file("${project.buildDir}/itest-results")
+        html.destination file("${project.buildDir}/reports/itests")
+    }
+    binResultsDir file("${project.buildDir}/itest-results/binary")
+
+    include '**/*IT.class'
+    testClassesDir = sourceSets.itest.output.classesDir
+    classpath = sourceSets.itest.runtimeClasspath
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled false
+        xml.enabled true
+        csv.enabled false
+    }
+}
+jacocoTestReport.dependsOn test
+check.dependsOn jacocoTestReport
+
+jar.doFirst {
+    manifest {
+        attributes (
+            'Created-By': meta.createdBy,
+            'Built-By': meta.buildBy,
+
+            'Build-Branch': dmpkitRelease.currentBranch(),
+            'Build-Revision': dmpkitRelease.revision(),
+            'Build-Timestamp': System.currentTimeMillis(),
+
+            'Implementation-Title': project.description,
+            'Implementation-Vendor': meta.orgName,
+            'Implementation-Vendor-Id': project.group,
+            'Implementation-Version': project.version,
+            'Implementation-URL': meta.orgUrl,
+
+            'Specification-Title': project.description,
+            'Specification-Version': project.version,
+            'Specification-Vendor': meta.orgName
+        )
+    }
+}
+
+dmpkitRelease {
+    envBuildNumber = 'BUILD_NUMBER'
+    envDefaultBranch = 'BRANCH_NAME'
+}
