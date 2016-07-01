@@ -75,24 +75,21 @@ def stageCheckout = {
     stage 'Checkout'
     checkout([
         $class: 'GitSCM',
-        branches: [[name: gitBranchName ?: '**']],
+        branches: scm.branches,
         browser: [
             $class: 'BitbucketWeb',
             repoUrl: "https://bitbucket.org/${teamName}/${repoName}"
         ],
-        doGenerateSubmoduleConfigurations: false,
-        extensions: [
+        doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
+        extensions: scm.extensions + [
             [$class: 'CleanBeforeCheckout'],
             // to prevent working on detached HEAD and
             // to be able to detect branch name by means of 'git rev-parse --abbrev-ref HEAD
-            [$class: 'LocalBranch']
+            [$class: 'LocalBranch'],
+            [$class: 'PruneStaleBranch']
         ],
         submoduleCfg: [],
-        userRemoteConfigs: [[
-            credentialsId: 'jenkins_bitbucket_ssh',
-            name: remoteName,
-            url: "git@bitbucket.org:${teamName}/${repoName}.git"
-        ]],
+        userRemoteConfigs: scm.userRemoteConfigs,
         poll: false
     ])
 

@@ -134,7 +134,7 @@ public class ReleasePlugin implements Plugin<Project> {
 
             Grgit scm = project[EXTENSION].scm
             scm.push(
-                tags: true,
+                refsOrSpecs: ["refs/tags/${project[EXTENSION].releaseTag()}"],
                 // be able to check external project properties passed by means of -Prelease.dryRun=true
                 dryRun: project[EXTENSION].dryRun || String.valueOf(project.properties['release.dryRun']).toBoolean()
             )

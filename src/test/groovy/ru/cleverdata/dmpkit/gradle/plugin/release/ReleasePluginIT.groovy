@@ -389,6 +389,53 @@ class ReleasePluginIT {
     }
 
     @Test
+    public void dmpkitPushReleaseTag_should_pushOnlySingleReleaseTag() throws Exception {
+        Path local = tmpDir.resolve('local')
+        local.toFile().mkdirs()
+
+        Path remote = tmpDir.resolve('remote')
+        remote.toFile().mkdirs()
+
+        createGradleFiles(local)
+
+        Grgit scm = Grgit.init(dir: local.toString())
+        Commit commit = null
+        try {
+            scm.add(patterns: ['settings.gradle', 'build.gradle', 'gradle.properties'])
+            commit = scm.commit(message: 'Gradle files added')
+            scm.checkout(branch: 'release/test-project-3.2.1', createBranch: true)
+            scm.tag.add(name: 'test-project-3.2.0', message: 'release :: test-project :: 3.2.0')
+            scm.tag.add(name: 'test-project-3.2.1', message: 'release :: test-project :: 3.2.1')
+            scm.remote.add(name: 'origin', url: "${remote.toAbsolutePath()}")
+        } finally {
+            scm.close()
+        }
+
+        scm = Grgit.init(dir: remote.toString())
+        try {
+            BuildResult result = GradleRunner.create()
+                .withProjectDir(local.toFile())
+                .withPluginClasspath()
+                .withArguments('dmpkitPushReleaseTag', '--stacktrace', '--refresh-dependencies')
+                .build();
+            assertThat(result.task(':dmpkitPushReleaseTag').outcome, equalTo(TaskOutcome.SUCCESS));
+
+            List<Tag> tags = scm.tag.list()
+            assertThat(tags, hasSize(1))
+            assertThat(tags[0].fullName, containsString('test-project-3.2.1'))
+            assertThat(tags[0].fullMessage, equalTo('release :: test-project :: 3.2.1'))
+
+            scm.checkout(branch: 'tags/test-project-3.2.1')
+            assertThat(scm.head().id, equalTo(commit.id))
+
+            assertThat(remote.toFile().list(),
+                arrayContainingInAnyOrder('settings.gradle', 'build.gradle', 'gradle.properties', '.git'))
+        } finally {
+            scm.close()
+        }
+    }
+
+    @Test
     public void dmpkitPushReleaseTag_should_ensureReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
