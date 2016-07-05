@@ -13,13 +13,13 @@ ext {
             },
             release: {
                 maven {
-                    url 'http://devtools1.1dmp.ru/artifactory/libs-release-local'
+                    url repoPublishReleaseUrl
                     credentials repos.credentials
                 }
             },
             snapshot: {
                 maven {
-                    url 'http://devtools1.1dmp.ru/artifactory/libs-snapshot-local'
+                    url repoPublishSnapshotUrl
                     credentials repos.credentials
                 }
             }
@@ -30,13 +30,13 @@ ext {
             },
             release: {
                 maven {
-                    url 'http://devtools1.1dmp.ru/artifactory/libs-release'
+                    url repoResolveReleaseUrl
                     credentials repos.credentials
                 }
             },
             snapshot: {
                 maven {
-                    url 'http://devtools1.1dmp.ru/artifactory/libs-snapshot'
+                    url repoResolveSnapshotUrl
                     credentials repos.credentials
                 }
             }
