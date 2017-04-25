@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2014, CleverDATA, LLC. All Rights Reserved.
+ *
+ * All information contained herein is, and remains the property of CleverDATA, LLC.
+ * The intellectual and technical concepts contained herein are proprietary to
+ * CleverDATA, LLC. Dissemination of this information or reproduction of this
+ * material is strictly forbidden unless prior written permission is obtained from
+ * CleverDATA, LLC.
+ *
+ * Unless required by applicable law or agreed to in writing, software is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied.
+ */
+
 import groovy.io.FileType
 
 buildscript {
@@ -129,10 +143,10 @@ task itest(type: Test) {
 
     // change reporting folders for integration tests to prevent conflicts and overwrites of unit tests reports
     reports {
-        junitXml.destination file("${project.buildDir}/itest-results")
+        junitXml.destination file("${project.buildDir}/itest-results/itest")
         html.destination file("${project.buildDir}/reports/itests")
     }
-    binResultsDir file("${project.buildDir}/itest-results/binary")
+    binResultsDir file("${project.buildDir}/itest-results/itest/binary")
 
     include '**/*IT.class'
     testClassesDir = sourceSets.itest.output.classesDir
