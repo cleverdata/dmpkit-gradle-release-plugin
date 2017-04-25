@@ -143,10 +143,10 @@ task itest(type: Test) {
 
     // change reporting folders for integration tests to prevent conflicts and overwrites of unit tests reports
     reports {
-        junitXml.destination file("${project.buildDir}/itest-results")
+        junitXml.destination file("${project.buildDir}/itest-results/itest")
         html.destination file("${project.buildDir}/reports/itests")
     }
-    binResultsDir file("${project.buildDir}/itest-results/binary")
+    binResultsDir file("${project.buildDir}/itest-results/itest/binary")
 
     include '**/*IT.class'
     testClassesDir = sourceSets.itest.output.classesDir
