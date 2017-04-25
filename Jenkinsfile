@@ -127,13 +127,13 @@ def stageReleasePrepare = {
 def stageUnitTest = {
     stage 'Unit Test'
     sh './gradlew --console=plain --stacktrace test'
-    step([$class: 'JUnitResultArchiver', testResults: '**/target/test-results/TEST-*.xml'])
+    step([$class: 'JUnitResultArchiver', testResults: '**/target/test-results/**/TEST-*.xml'])
 }
 
 def stageIntegrationTest = {
     stage 'Integration Test'
     sh './gradlew --console=plain --stacktrace itest'
-    step([$class: 'JUnitResultArchiver', testResults: '**/target/itest-results/TEST-*.xml'])
+    step([$class: 'JUnitResultArchiver', testResults: '**/target/itest-results/**/TEST-*.xml'])
 }
 
 def stageCodeQuality = {
