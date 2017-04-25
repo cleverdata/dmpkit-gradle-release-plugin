@@ -1,10 +1,10 @@
 ext {
 
     versions = [
-        gradleGit: '1.5.0',
-        jacoco: '0.7.7.201606060606',
+        gradleGit: '1.6.0',
+        jacoco: '0.7.9',
         hamcrest: '2.0.0.0',
-        testng: '6.9.6'
+        testng: '6.11'
     ]
 
     libs = [

@@ -40,56 +40,56 @@ public class ReleasePlugin implements Plugin<Project> {
 
         Task dmpkitPrintCurrentVersion = project.task('dmpkitPrintCurrentVersion', {
             description = 'Print current version of the project'
-        }) << {
+        }) doLast {
             println project[EXTENSION].currentVersion()
         }
 
         Task dmpkitPrintReleaseVersion = project.task('dmpkitPrintReleaseVersion', {
             description = 'Print release version of the project'
-        }) << {
+        }) doLast {
             println project[EXTENSION].releaseVersion()
         }
 
         Task dmpkitPrintDefaultBranch = project.task('dmpkitPrintDefaultBranch', {
             description = 'Print default branch of the project'
-        }) << {
+        }) doLast {
             println project[EXTENSION].defaultBranch
         }
 
         Task dmpkitPrintCurrentBranch = project.task('dmpkitPrintCurrentBranch', {
             description = 'Print release branch of the project'
-        }) << {
+        }) doLast {
             println project[EXTENSION].currentBranch()
         }
 
         Task dmpkitPrintReleaseBranch = project.task('dmpkitPrintReleaseBranch', {
             description = 'Print release branch of the project'
-        }) << {
+        }) doLast {
             println project[EXTENSION].releaseBranch()
         }
 
         Task dmpkitPrintReleaseTag = project.task('dmpkitPrintReleaseTag', {
             description = 'Print release tag of the project'
-        }) << {
+        }) doLast {
             println project[EXTENSION].releaseTag()
         }
 
         Task dmpkitPrintRevision = project.task('dmpkitPrintRevision', {
             description = 'Print revision of the project'
-        }) << {
+        }) doLast {
             println project[EXTENSION].revision()
         }
 
         Task dmpkitCreateReleaseBranch = project.task('dmpkitCreateReleaseBranch', {
             description = 'Create release branch of the project'
-        }) << {
+        }) doLast {
             Grgit scm = project[EXTENSION].scm
             scm.checkout(branch: project[EXTENSION].releaseBranch(), createBranch: true)
         }
 
         Task dmpkitUpdateVersion = project.task('dmpkitUpdateVersion', {
             description = 'Update version of the project to release version'
-        }) << { Task task ->
+        }) doLast { Task task ->
             ensureReleaseBranch(task)
 
             String releaseVersion = project[EXTENSION].releaseVersion()
@@ -107,7 +107,7 @@ public class ReleasePlugin implements Plugin<Project> {
 
         Task dmpkitCommitVersion = project.task('dmpkitCommitVersion', {
             description = 'Update version of the project to release version'
-        }) << { Task task ->
+        }) doLast { Task task ->
             ensureReleaseBranch(task)
 
             Grgit scm = project[EXTENSION].scm
@@ -117,7 +117,7 @@ public class ReleasePlugin implements Plugin<Project> {
 
         Task dmpkitTagReleaseBranch = project.task('dmpkitTagReleaseBranch', {
             description = 'Tag the release branch'
-        }) << { Task task ->
+        }) doLast { Task task ->
             ensureReleaseBranch(task)
 
             Grgit scm = project[EXTENSION].scm
@@ -129,7 +129,7 @@ public class ReleasePlugin implements Plugin<Project> {
 
         Task dmpkitPushReleaseTag = project.task('dmpkitPushReleaseTag', {
             description = 'Pushes release tag to the remote repository'
-        }) << { Task task ->
+        }) doLast { Task task ->
             ensureReleaseBranch(task)
 
             Grgit scm = project[EXTENSION].scm
@@ -142,13 +142,13 @@ public class ReleasePlugin implements Plugin<Project> {
 
         Task dmpkitCheckoutDefaultBranch = project.task('dmpkitCheckoutDefaultBranch', {
             description = 'Check out the default branch'
-        }) << {
+        }) doLast {
             project[EXTENSION].scm.checkout(branch: project[EXTENSION].defaultBranch)
         }
 
         Task dmpkitRemoveReleaseBranch = project.task('dmpkitRemoveReleaseBranch', {
             description = 'Remove release branch'
-        }) << {
+        }) doLast {
             project[EXTENSION].scm.branch.remove(names: [project[EXTENSION].releaseBranch()], force: true)
         }
 
