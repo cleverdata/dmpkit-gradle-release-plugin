@@ -16,4 +16,3 @@
 
 library 'dmpkit-pipelines@develop'
 dmpkitPipeline 'Library :: Java'
-
