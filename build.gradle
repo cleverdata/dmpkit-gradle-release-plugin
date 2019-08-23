@@ -45,6 +45,7 @@ dependencies {
 
     testImplementation libs.external.hamcrest
     testImplementation libs.external.testng
+    testImplementation libs.external.gradleTestKit
 
     jacocoAnt libs.external.jacoco
     jacocoAgent libs.external.jacocoAgent
@@ -213,7 +214,7 @@ jar.doFirst {
 
 gradlePlugin {
     plugins {
-        // using dmpkitGradleRelease instead of dmpkitRelease as we applying plugin to itself
+        // using dmpkitGradleRelease instead of dmpkitRelease as we are applying this plugin to itself
         dmpkitGradleRelease {
             id = 'cleverdata-dmpkit-gradle-release'
             implementationClass = 'ru.cleverdata.dmpkit.gradle.plugin.release.ReleasePlugin'

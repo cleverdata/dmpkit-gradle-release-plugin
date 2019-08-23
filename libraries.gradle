@@ -35,6 +35,7 @@ ext {
             ***********************************************************************************************************/
             hamcrest: "org.hamcrest:java-hamcrest:${versions.hamcrest}",
             testng: "org.testng:testng:${versions.testng}",
+            gradleTestKit: dependencies.gradleTestKit(),
 
             /***********************************************************************************************************
             *                                        CHECK DEPS                                                        *
