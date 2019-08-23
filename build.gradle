@@ -45,7 +45,6 @@ dependencies {
 
     testImplementation libs.external.hamcrest
     testImplementation libs.external.testng
-    testImplementation libs.external.gradleTestKit
 
     jacocoAnt libs.external.jacoco
     jacocoAgent libs.external.jacocoAgent
@@ -101,9 +100,19 @@ model {
                     }
                     developers {
                         developer {
+                            id = 'mpryakhin'
+                            name = 'Mike Pryakhin'
+                            email = 'm.pryahin@cleverdata.ru'
+                        }
+                        developer {
+                            id = 'rsharipov'
+                            name = 'Rinat Sharipov'
+                            email = 'r.sharipov@cleverdata.ru'
+                        }
+                        developer {
                             id = 'szhemzhitsky'
                             name = 'Sergey Zhemzhitsky'
-                            email = 'szhemzhitski@gmail.com'
+                            email = 's.zhemzhitsky@cleverdata.ru'
                         }
                     }
                     organization {
