@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.cleverdata.dmpkit.gradle.plugin.release
+package io.dmpkit.gradle.plugin.release
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

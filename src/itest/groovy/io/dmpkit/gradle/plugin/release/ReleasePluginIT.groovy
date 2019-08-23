@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.cleverdata.dmpkit.gradle.plugin.release
+package io.dmpkit.gradle.plugin.release
 
 import org.ajoberstar.grgit.Branch
 import org.ajoberstar.grgit.Commit
@@ -631,7 +631,7 @@ class ReleasePluginIT {
 
         String buildScript = """
             plugins {
-                id 'cleverdata-dmpkit-gradle-release'
+                id 'dmpkit-gradle-release'
             }
         """
         Files.write(dir.resolve('build.gradle'), buildScript.getBytes(StandardCharsets.UTF_8))

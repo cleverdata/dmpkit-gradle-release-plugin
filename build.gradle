@@ -28,7 +28,7 @@ ext {
         createdBy: "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
         orgName: 'CleverData Inc.',
         orgUrl: 'http://www.cleverdata.ru',
-        projectGroup: 'ru.cleverdata.dmpkit.gradle.plugin',
+        projectGroup: 'io.dmpkit',
     ]
 }
 
@@ -78,7 +78,7 @@ idea {
 }
 
 group meta.projectGroup
-description 'CLEVERDATA :: DMPKIT :: GRADLE :: PLUGIN :: RELEASE'
+description 'DMPKIT :: GRADLE :: PLUGIN :: RELEASE'
 
 defaultTasks 'build'
 buildDir 'target'
@@ -227,8 +227,8 @@ gradlePlugin {
     plugins {
         // using dmpkitGradleRelease instead of dmpkitRelease as we are applying this plugin to itself
         dmpkitGradleRelease {
-            id = 'cleverdata-dmpkit-gradle-release'
-            implementationClass = 'ru.cleverdata.dmpkit.gradle.plugin.release.ReleasePlugin'
+            id = 'dmpkit-gradle-release'
+            implementationClass = 'io.dmpkit.gradle.plugin.release.ReleasePlugin'
         }
     }
     testSourceSets sourceSets.itest
