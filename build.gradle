@@ -35,16 +35,16 @@ apply plugin: 'java-gradle-plugin' // make gradle's testkit happy
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
 apply plugin: 'jacoco'
+apply plugin: 'signing'
 
 repositories repos.resolve.all
 dependencies {
-    compile libs.external.gradleApi
-    compile libs.external.gradleGroovy
-    compile libs.external.gradleGit
+    implementation libs.external.gradleApi
+    implementation libs.external.gradleGroovy
+    implementation libs.external.grgit
 
-    testCompile libs.external.hamcrest
-    testCompile libs.external.testng
-    testCompile libs.external.gradleTestKit
+    testImplementation libs.external.hamcrest
+    testImplementation libs.external.testng
 
     jacocoAnt libs.external.jacoco
     jacocoAgent libs.external.jacocoAgent
@@ -53,7 +53,7 @@ dependencies {
 // apply plugin to itself
 def scriptEngine = new GroovyScriptEngine(
     sourceSets.main.allSource.srcDirs as String[],
-    new URLClassLoader(configurations.runtime.collect { it.toURI().toURL() } as URL[], buildscript.classLoader)
+    new URLClassLoader(configurations.runtimeClasspath.collect { it.toURI().toURL() } as URL[], buildscript.classLoader)
 )
 sourceSets.main.allSource.srcDirs.each { File srcDir ->
     if (srcDir.exists()) {
@@ -88,7 +88,45 @@ model {
                 artifact sourceJar {
                     classifier 'sources'
                 }
+                pom {
+                    name = 'DMPkit Gradle Release Plugin'
+                    description = 'Provides additional tasks prefixed with dmpkit to release git projects easier'
+                    url = 'https://github.com/cleverdata/dmpkit-gradle-release-plugin'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'szhemzhitsky'
+                            name = 'Sergey Zhemzhitsky'
+                            email = 'szhemzhitski@gmail.com'
+                        }
+                    }
+                    organization {
+                        name = 'CleverDATA'
+                        url = 'http://cleverdata.ru/en'
+                    }
+                    scm {
+                        connection = 'scm:git:git@github.com:cleverdata/dmpkit-gradle-release-plugin.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:cleverdata/dmpkit-gradle-release-plugin.git'
+                        url = 'https://github.com/cleverdata/dmpkit-gradle-release-plugin'
+                    }
+                    issueManagement {
+                        system = 'GitHub'
+                        url = 'https://github.com/cleverdata/dmpkit-gradle-release-plugin/issues'
+                    }
+                    distributionManagement {
+                        downloadUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    }
+                    packaging = 'jar'
+                }
             }
+        }
+        signing {
+            sign publications
         }
         repositories repos.publish.smart
     }
@@ -107,17 +145,11 @@ task sourceJar(type: Jar) {
 artifacts.archives sourceJar
 
 configurations {
-    itestCompile.extendsFrom testCompile
-    itestRuntime.extendsFrom testRuntime
+    itestImplementation.extendsFrom testImplementation
 }
 
 sourceSets {
-    itest {
-        compileClasspath += main.output + test.output + configurations.itestCompile
-        runtimeClasspath += main.output + test.output + configurations.itestRuntime
-        output.classesDir = test.output.classesDir
-        output.resourcesDir = test.output.resourcesDir
-    }
+    itest
 }
 
 test {
@@ -141,26 +173,19 @@ task itest(type: Test) {
         showStandardStreams true
     }
 
-    // change reporting folders for integration tests to prevent conflicts and overwrites of unit tests reports
-    reports {
-        junitXml.destination file("${project.buildDir}/itest-results/itest")
-        html.destination file("${project.buildDir}/reports/itests")
-    }
-    binResultsDir file("${project.buildDir}/itest-results/itest/binary")
-
     include '**/*IT.class'
-    testClassesDir = sourceSets.itest.output.classesDir
+    testClassesDirs = sourceSets.itest.output.classesDirs
     classpath = sourceSets.itest.runtimeClasspath
 }
 
 jacocoTestReport {
     reports {
-        html.enabled false
-        xml.enabled true
+        html.enabled true
+        xml.enabled false
         csv.enabled false
     }
 }
-jacocoTestReport.dependsOn test
+jacocoTestReport.dependsOn test, itest
 check.dependsOn jacocoTestReport
 
 jar.doFirst {
@@ -184,6 +209,17 @@ jar.doFirst {
             'Specification-Vendor': meta.orgName
         )
     }
+}
+
+gradlePlugin {
+    plugins {
+        // using dmpkitGradleRelease instead of dmpkitRelease as we applying plugin to itself
+        dmpkitGradleRelease {
+            id = 'cleverdata-dmpkit-gradle-release'
+            implementationClass = 'ru.cleverdata.dmpkit.gradle.plugin.release.ReleasePlugin'
+        }
+    }
+    testSourceSets sourceSets.itest
 }
 
 dmpkitRelease {

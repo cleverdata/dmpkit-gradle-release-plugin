@@ -46,18 +46,18 @@ class ReleasePluginIT {
     private Path tmpDir;
 
     @BeforeMethod
-    public void setUp(Method test) throws Exception {
+    void setUp(Method test) throws Exception {
         Path root = new File(this.class.getResource("${this.class.simpleName}.class").toURI()).parentFile.toPath()
         tmpDir = Files.createTempDirectory(root.toAbsolutePath(), test.name).toAbsolutePath()
     }
 
     @AfterMethod
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         assertThat(tmpDir.deleteDir(), is(true))
     }
 
     @Test
-    public void dmpkitPrintCurrentVersion_should_printCurrentVersion() throws Exception {
+    void dmpkitPrintCurrentVersion_should_printCurrentVersion() throws Exception {
         createGradleFiles(tmpDir)
 
         BuildResult result = GradleRunner.create()
@@ -71,7 +71,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPrintReleaseVersion_should_printReleaseVersion() throws Exception {
+    void dmpkitPrintReleaseVersion_should_printReleaseVersion() throws Exception {
         createGradleFiles(tmpDir)
 
         BuildResult result = GradleRunner.create()
@@ -88,7 +88,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPrintDefaultBranch_should_printDefaultBranch() throws Exception {
+    void dmpkitPrintDefaultBranch_should_printDefaultBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         String buildScript = """
@@ -112,7 +112,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPrintCurrentBranch_should_printCurrentBranch() throws Exception {
+    void dmpkitPrintCurrentBranch_should_printCurrentBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -135,7 +135,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPrintReleaseBranch_should_printReleaseBranch() throws Exception {
+    void dmpkitPrintReleaseBranch_should_printReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit.init(dir: tmpDir.toString()).close()
@@ -154,7 +154,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPrintReleaseTag_should_printReleaseTag() throws Exception {
+    void dmpkitPrintReleaseTag_should_printReleaseTag() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit.init(dir: tmpDir.toString()).close()
@@ -173,7 +173,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPrintRevision_should_printRevision() throws Exception {
+    void dmpkitPrintRevision_should_printRevision() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -197,7 +197,7 @@ class ReleasePluginIT {
 
     @Test
     @SuppressWarnings("GroovyAssignabilityCheck")
-    public void dmpkitCreateReleaseBranch_should_createReleaseBranch() throws Exception {
+    void dmpkitCreateReleaseBranch_should_createReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -221,7 +221,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitUpdateVersion_should_updateVersionsFile() throws Exception {
+    void dmpkitUpdateVersion_should_updateVersionsFile() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -252,7 +252,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitUpdateVersion_should_ensureReleaseBranch() throws Exception {
+    void dmpkitUpdateVersion_should_ensureReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit.init(dir: tmpDir.toString()).close()
@@ -268,7 +268,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitCommitVersion_should_commitReleaseVersion() throws Exception {
+    void dmpkitCommitVersion_should_commitReleaseVersion() throws Exception {
         createGradleFiles(tmpDir)
 
         String buildScript = """
@@ -300,7 +300,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitCommitVersion_should_ensureReleaseBranch() throws Exception {
+    void dmpkitCommitVersion_should_ensureReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit.init(dir: tmpDir.toString()).close()
@@ -315,7 +315,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitTagReleaseBranch_should_tagReleaseBranch() throws Exception {
+    void dmpkitTagReleaseBranch_should_tagReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -342,7 +342,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitTagReleaseBranch_should_ensureReleaseBranch() throws Exception {
+    void dmpkitTagReleaseBranch_should_ensureReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit.init(dir: tmpDir.toString()).close()
@@ -357,7 +357,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPushReleaseTag_should_pushReleaseTag() throws Exception {
+    void dmpkitPushReleaseTag_should_pushReleaseTag() throws Exception {
         Path local = tmpDir.resolve('local')
         local.toFile().mkdirs()
 
@@ -403,7 +403,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPushReleaseTag_should_pushOnlySingleReleaseTag() throws Exception {
+    void dmpkitPushReleaseTag_should_pushOnlySingleReleaseTag() throws Exception {
         Path local = tmpDir.resolve('local')
         local.toFile().mkdirs()
 
@@ -450,7 +450,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitPushReleaseTag_should_ensureReleaseBranch() throws Exception {
+    void dmpkitPushReleaseTag_should_ensureReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit.init(dir: tmpDir.toString()).close()
@@ -465,7 +465,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitCheckoutDefaultBranch_should_checkoutDefaultBranch() throws Exception {
+    void dmpkitCheckoutDefaultBranch_should_checkoutDefaultBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         String buildScript = """
@@ -498,7 +498,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitRemoveReleaseBranch_should_removeReleaseBranch() throws Exception {
+    void dmpkitRemoveReleaseBranch_should_removeReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -524,7 +524,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitReleaseCleanup_should_checkoutDefault_and_removeReleaseBranch() throws Exception {
+    void dmpkitReleaseCleanup_should_checkoutDefault_and_removeReleaseBranch() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -551,7 +551,7 @@ class ReleasePluginIT {
     }
 
     @Test
-    public void dmpkitReleaseInit_should_createReleaseBranch_and_commitUpdatedVersion() throws Exception {
+    void dmpkitReleaseInit_should_createReleaseBranch_and_commitUpdatedVersion() throws Exception {
         createGradleFiles(tmpDir)
 
         Grgit scm = Grgit.init(dir: tmpDir.toString())
@@ -577,7 +577,7 @@ class ReleasePluginIT {
 
     @Test
     @SuppressWarnings("GroovyAssignabilityCheck")
-    public void dmpkitReleaseFinish_should_pushTag() throws Exception {
+    void dmpkitReleaseFinish_should_pushTag() throws Exception {
         Path local = tmpDir.resolve('local')
         local.toFile().mkdirs()
 

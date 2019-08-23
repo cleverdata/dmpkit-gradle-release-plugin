@@ -28,6 +28,8 @@ import static org.hamcrest.Matchers.nullValue
 
 class ReleasePluginTest {
 
+    private static final String PLUGIN_NAME = 'cleverdata-dmpkit-gradle-release'
+
     @DataProvider
     private Object[][] tasks() {[
         ['dmpkitPrintCurrentVersion'],
@@ -50,26 +52,26 @@ class ReleasePluginTest {
     ]}
 
     @Test(dataProvider = "tasks")
-    public void apply_should_addTaskToProject(String task) throws Exception {
+    void apply_should_addTaskToProject(String task) throws Exception {
         Project project = ProjectBuilder.builder().build()
-        project.pluginManager.apply 'cleverdata-dmpkit-gradle-release'
+        project.pluginManager.apply PLUGIN_NAME
 
         assertThat(project.tasks.findByName(task), notNullValue())
     }
 
     @Test
-    public void apply_should_notAddUnexpectedTasks() throws Exception {
+    void apply_should_notAddUnexpectedTasks() throws Exception {
         Project project = ProjectBuilder.builder().build()
-        project.pluginManager.apply 'cleverdata-dmpkit-gradle-release'
+        project.pluginManager.apply PLUGIN_NAME
 
         assertThat(project.tasks.findAll { it.name.startsWith('dmpkit') }, hasSize(tasks().length))
     }
 
     @Test
     @SuppressWarnings("GroovyAssignabilityCheck")
-    public void apply_should_registerExtension() throws Exception {
+    void apply_should_registerExtension() throws Exception {
         Project project = ProjectBuilder.builder().build()
-        project.pluginManager.apply 'cleverdata-dmpkit-gradle-release'
+        project.pluginManager.apply PLUGIN_NAME
 
         def extension = project.dmpkitRelease
         assertThat(extension, notNullValue())

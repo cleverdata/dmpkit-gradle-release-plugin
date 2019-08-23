@@ -15,8 +15,8 @@
 ext {
 
     versions = [
-        gradleGit: '1.6.0',
-        jacoco: '0.7.9',
+        grgit: '1.9.3',
+        jacoco: '0.8.4',
         hamcrest: '2.0.0.0',
         testng: '6.11'
     ]
@@ -28,14 +28,13 @@ ext {
             ***********************************************************************************************************/
             gradleApi: dependencies.gradleApi(),
             gradleGroovy: dependencies.localGroovy(),
-            gradleGit: "org.ajoberstar:gradle-git:${versions.gradleGit}",
+            grgit: "org.ajoberstar:grgit:${versions.grgit}",
 
             /***********************************************************************************************************
             *                                        TEST DEPS                                                         *
             ***********************************************************************************************************/
             hamcrest: "org.hamcrest:java-hamcrest:${versions.hamcrest}",
             testng: "org.testng:testng:${versions.testng}",
-            gradleTestKit: dependencies.gradleTestKit(),
 
             /***********************************************************************************************************
             *                                        CHECK DEPS                                                        *
