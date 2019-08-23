@@ -92,7 +92,7 @@ model {
                 }
                 pom {
                     name = 'DMPkit Gradle Release Plugin'
-                    description = 'Provides additional tasks prefixed with dmpkit to release git projects easier'
+                    description = 'DMPkit Gradle Release Plugin provides additional tasks to release git projects easier'
                     url = 'https://github.com/cleverdata/dmpkit-gradle-release-plugin'
                     licenses {
                         license {
@@ -102,19 +102,16 @@ model {
                     }
                     developers {
                         developer {
-                            id = 'mpryakhin'
+                            id = 'mpryahin'
                             name = 'Mike Pryakhin'
-                            email = 'm.pryahin@cleverdata.ru'
                         }
                         developer {
-                            id = 'rsharipov'
+                            id = 'kent2171'
                             name = 'Rinat Sharipov'
-                            email = 'r.sharipov@cleverdata.ru'
                         }
                         developer {
-                            id = 'szhemzhitsky'
+                            id = 'szhem'
                             name = 'Sergey Zhemzhitsky'
-                            email = 's.zhemzhitsky@cleverdata.ru'
                         }
                     }
                     organization {
@@ -131,7 +128,7 @@ model {
                         url = 'https://github.com/cleverdata/dmpkit-gradle-release-plugin/issues'
                     }
                     distributionManagement {
-                        downloadUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                        downloadUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
                     }
                     packaging = 'jar'
                 }
