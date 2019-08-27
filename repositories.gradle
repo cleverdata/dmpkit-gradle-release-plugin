@@ -18,8 +18,8 @@ ext {
 
     repos = [
         credentials: {
-            username mavenUser
-            password mavenPassword
+            username project.hasProperty('mavenUser') ? project.mavenUser : ''
+            password project.hasProperty('mavenPassword') ? project.mavenPassword : ''
         },
         resolve: [:],
         publish: [:]
