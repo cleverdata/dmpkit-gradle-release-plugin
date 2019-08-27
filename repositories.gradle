@@ -20,47 +20,31 @@ ext {
         credentials: {
             username mavenUser
             password mavenPassword
-        }
-    ]
-    repos += [
-        publish: [
-            local: {
-                mavenLocal()
-            },
-            release: {
-                maven {
-                    url repoPublishReleaseUrl
-                    credentials repos.credentials
-                }
-            },
-            snapshot: {
-                maven {
-                    url repoPublishSnapshotUrl
-                    credentials repos.credentials
-                }
-            }
-        ],
-        resolve: [
-            local: {
-                mavenLocal()
-            },
-            release: {
-                maven {
-                    url repoResolveReleaseUrl
-                    credentials repos.credentials
-                }
-            },
-            snapshot: {
-                maven {
-                    url repoResolveSnapshotUrl
-                    credentials repos.credentials
-                }
-            }
-        ]
+        },
+        resolve: [:],
+        publish: [:]
     ]
 
-    // group all the resolve repository closures together
-    repos.resolve.all = repos.resolve.values().inject() { acc, repo -> acc << repo }
+    repos.resolve.all = {[
+        mavenLocal(),
+        mavenCentral(),
+        jcenter()
+    ]}
+
+    repos.publish = [
+        release: {
+            maven {
+                url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                credentials repos.credentials
+            }
+        },
+        snapshot: {
+            maven {
+                url 'https://oss.sonatype.org/content/repositories/snapshots/'
+                credentials repos.credentials
+            }
+        }
+    ]
     // smart publication that detects whether it's necessary to publish into snapshot or release repo
     repos.publish.smart = project.version.endsWith('-SNAPSHOT') ? repos.publish.snapshot : repos.publish.release
 
