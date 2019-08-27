@@ -46,5 +46,5 @@ script:
   - ./gradlew --console=plain --stacktrace itest
   - ./gradlew --console=plain --stacktrace check -x test -x itest
   - ./gradlew --console=plain --stacktrace jar
-#  - ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
-  - ./gradlew --console=plain --stacktrace publish
+  - ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
+#  - ./gradlew --console=plain --stacktrace publish
