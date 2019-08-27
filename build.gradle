@@ -235,3 +235,23 @@ dmpkitRelease {
     envBuildNumber = 'BUILD_NUMBER'
     envDefaultBranch = 'BRANCH_NAME'
 }
+
+// workaround for
+// - https://github.com/gradle/gradle/issues/10363
+// - https://github.com/gradle/gradle/pull/10366
+gradle.taskGraph.whenReady { taskGraph ->
+    taskGraph.allTasks
+        .findAll { it instanceof Sign }
+        .each { task ->
+            task.doFirst {
+                def gpgDir = mkdir "${buildDir}/gnupg"
+                file("${gpgDir}/secring.gpg").with {
+                    deleteOnExit()
+                    bytes = project.findProperty("secretKeyRing").decodeBase64()
+                }
+                project.ext."signing.keyId" = project.findProperty("secretKeyId")
+                project.ext."signing.secretKeyRingFile" = "${gpgDir}/secring.gpg"
+                project.ext."signing.password" = project.findProperty("signingPassword")
+            }
+        }
+}
