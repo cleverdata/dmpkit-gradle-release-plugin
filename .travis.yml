@@ -41,5 +41,10 @@ script:
   - echo "TRAVIS_JOB_ID - ${TRAVIS_JOB_ID}"
   - echo "TRAVIS_JOB_NAME - ${TRAVIS_JOB_NAME}"
   - echo "TRAVIS_JOB_NUMBER - ${TRAVIS_JOB_NUMBER}"
-  - echo "TRAVIS_JOB_WEB_URL - "${TRAVIS_JOB_WEB_URL}"
-  - ./gradlew build
+  - ./gradlew --console=plain --stacktrace dmpkitReleaseInit
+  - ./gradlew --console=plain --stacktrace test
+  - ./gradlew --console=plain --stacktrace itest
+  - ./gradlew --console=plain --stacktrace check -x test -x itest
+  - ./gradlew --console=plain --stacktrace jar
+  - ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
+  - ./gradlew --console=plain --stacktrace publish
