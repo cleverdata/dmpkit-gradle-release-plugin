@@ -34,4 +34,12 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
+  - echo "TRAVIS_COMMIT_MESSAGE: ${TRAVIS_COMMIT_MESSAGE}"
+  - echo "TRAVIS_COMMIT: ${TRAVIS_COMMIT}"
+  - echo "TRAVIS_COMMIT_RANGE: ${TRAVIS_COMMIT_RANGE}"
+  - echo "TRAVIS_COMMIT_RANGE (fix): ${TRAVIS_COMMIT_RANGE/.../..}"
+  - echo "TRAVIS_JOB_ID: ${TRAVIS_JOB_ID}"
+  - echo "TRAVIS_JOB_NAME: ${TRAVIS_JOB_NAME}"
+  - echo "TRAVIS_JOB_NUMBER: ${TRAVIS_JOB_NUMBER}"
+  - echo "TRAVIS_JOB_WEB_URL: "${TRAVIS_JOB_WEB_URL}"
   - ./gradlew build
