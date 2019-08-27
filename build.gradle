@@ -244,14 +244,17 @@ gradle.taskGraph.whenReady { taskGraph ->
         .findAll { it instanceof Sign }
         .each { task ->
             task.doFirst {
-                def gpgDir = mkdir "${buildDir}/gnupg"
-                file("${gpgDir}/secring.gpg").with {
-                    deleteOnExit()
-                    bytes = project.findProperty("secretKeyRing").decodeBase64()
+                def gpgDir = "${buildDir}/gnupg"
+                if (!file("${gpgDir}/secring.gpg").exists()) {
+                    mkdir "${buildDir}/gnupg"
+                    file("${gpgDir}/secring.gpg").with {
+                        deleteOnExit()
+                        bytes = project.findProperty("secretKeyRing").decodeBase64()
+                    }
+                    project.ext."signing.keyId" = project.findProperty("secretKeyId")
+                    project.ext."signing.secretKeyRingFile" = "${gpgDir}/secring.gpg"
+                    project.ext."signing.password" = project.findProperty("signingPassword")
                 }
-                project.ext."signing.keyId" = project.findProperty("secretKeyId")
-                project.ext."signing.secretKeyRingFile" = "${gpgDir}/secring.gpg"
-                project.ext."signing.password" = project.findProperty("signingPassword")
             }
         }
 }
