@@ -1,6 +1,4 @@
 #
-# Copyright, 2019, CleverDATA, LLC.
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -37,30 +35,17 @@ git:
   depth: false
 
 script:
-  - |-
-      echo Prepare
-      export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
-      export BRANCH_NAME="${TRAVIS_BRANCH}"
+  - export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}" BRANCH_NAME="${TRAVIS_BRANCH}"
   - |-
       if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-        echo Release Prepare
         ./gradlew --console=plain --stacktrace dmpkitReleaseInit
       fi
-  - |-
-      echo Test
-      ./gradlew --console=plain --stacktrace test
-  - |-
-      echo Integration Test
-      ./gradlew --console=plain --stacktrace itest
-  - |-
-      echo Code Quality
-      ./gradlew --console=plain --stacktrace check -x test -x itest
-  - |-
-      echo Build
-      ./gradlew --console=plain --stacktrace jar
+  - ./gradlew --console=plain --stacktrace test
+  - ./gradlew --console=plain --stacktrace itest
+  - ./gradlew --console=plain --stacktrace check -x test -x itest
+  - ./gradlew --console=plain --stacktrace jar
   - |-
       if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-        echo Release Finish
         ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
         ./gradlew --console=plain --stacktrace publish
       fi
