@@ -1,6 +1,4 @@
 /*
- * Copyright, 2019, CleverDATA, LLC.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,7 +20,7 @@ import org.gradle.api.Task
 import org.gradle.api.tasks.TaskExecutionException
 import org.ajoberstar.grgit.Grgit
 
-public class ReleasePlugin implements Plugin<Project> {
+class ReleasePlugin implements Plugin<Project> {
 
     private static final String EXTENSION = 'dmpkitRelease';
     private static final String GRADLE_PROPS = 'gradle.properties';
@@ -50,7 +48,7 @@ public class ReleasePlugin implements Plugin<Project> {
 
     @Override
     @SuppressWarnings(["GroovyUnusedAssignment", "GroovyAssignabilityCheck"])
-    public void apply(Project project) {
+    void apply(Project project) {
         ReleasePluginExtension pluginExt = project.extensions.create(EXTENSION, ReleasePluginExtension)
         afterEvaluate(project)
 
