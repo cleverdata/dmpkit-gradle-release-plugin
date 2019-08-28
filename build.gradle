@@ -26,7 +26,7 @@ ext {
         createdBy: "${System.getProperty('java.version')} (${System.getProperty('java.specification.vendor')})",
         orgName: 'CleverData Inc.',
         orgUrl: 'http://www.cleverdata.ru',
-        projectGroup: 'io.dmpkit',
+        projectGroup: 'io.dmpkit.gradle',
     ]
 }
 
