@@ -57,7 +57,7 @@ jobs:
         - ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
         - ./gradlew --console=plain --stacktrace publish
 
-#script:
+script:
 #  - echo "TRAVIS_COMMIT_MESSAGE - ${TRAVIS_COMMIT_MESSAGE}"
 #  - echo "TRAVIS_COMMIT - ${TRAVIS_COMMIT}"
 #  - echo "TRAVIS_COMMIT_RANGE - ${TRAVIS_COMMIT_RANGE}"
@@ -65,6 +65,13 @@ jobs:
 #  - echo "TRAVIS_JOB_ID - ${TRAVIS_JOB_ID}"
 #  - echo "TRAVIS_JOB_NAME - ${TRAVIS_JOB_NAME}"
 #  - echo "TRAVIS_JOB_NUMBER - ${TRAVIS_JOB_NUMBER}"
+  - echo "TRAVIS_BUILD_NUMBER - ${TRAVIS_BUILD_NUMBER}"
+  - env
+  - if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+      export BUILD_NUMBER="${TRAVIS_JOB_NUMBER%%.*}"
+      export BRANCH_NAME="${TRAVIS_BRANCH}"
+    fi
+  - echo "$BUILD_NUMBER   $BRANCH_NAME"
 #  - ./gradlew --console=plain --stacktrace dmpkitReleaseInit
 #  - ./gradlew --console=plain --stacktrace test
 #  - ./gradlew --console=plain --stacktrace itest
