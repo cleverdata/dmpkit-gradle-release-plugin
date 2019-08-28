@@ -33,6 +33,9 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+git:
+  depth: false
+
 #jobs:
 #  include:
 #    - stage: Release Prepare
@@ -67,10 +70,11 @@ script:
 #  - echo "TRAVIS_JOB_NUMBER - ${TRAVIS_JOB_NUMBER}"
   - echo "TRAVIS_BUILD_NUMBER - ${TRAVIS_BUILD_NUMBER}"
   - env
-  - if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-      export BUILD_NUMBER="${TRAVIS_JOB_NUMBER%%.*}"
-      export BRANCH_NAME="${TRAVIS_BRANCH}"
-    fi
+  - |-
+      if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+        export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
+        export BRANCH_NAME="${TRAVIS_BRANCH}"
+      fi
   - echo "$BUILD_NUMBER   $BRANCH_NAME"
 #  - ./gradlew --console=plain --stacktrace dmpkitReleaseInit
 #  - ./gradlew --console=plain --stacktrace test
