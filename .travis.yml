@@ -36,50 +36,29 @@ cache:
 git:
   depth: false
 
-#jobs:
-#  include:
-#    - stage: Release Prepare
-#      if: branch = master
-#      script:
-#        - ./gradlew --console=plain --stacktrace dmpkitReleaseInit
-#    - stage: Test
-#      script:
-#        - ./gradlew --console=plain --stacktrace test
-#    - stage: Integration Test
-#      script:
-#        - ./gradlew --console=plain --stacktrace itest
-#    - stage: Code Quility
-#      script:
-#        - ./gradlew --console=plain --stacktrace check -x test -x itest
-#    - stage: Build
-#      script:
-#        - ./gradlew --console=plain --stacktrace jar
-#    - stage: Release Finish
-#      if: branch = master
-#      script:
-#        - ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
-#        - ./gradlew --console=plain --stacktrace publish
-
 script:
-#  - echo "TRAVIS_COMMIT_MESSAGE - ${TRAVIS_COMMIT_MESSAGE}"
-#  - echo "TRAVIS_COMMIT - ${TRAVIS_COMMIT}"
-#  - echo "TRAVIS_COMMIT_RANGE - ${TRAVIS_COMMIT_RANGE}"
-#  - echo "TRAVIS_COMMIT_RANGE (fix) - ${TRAVIS_COMMIT_RANGE/.../..}"
-#  - echo "TRAVIS_JOB_ID - ${TRAVIS_JOB_ID}"
-#  - echo "TRAVIS_JOB_NAME - ${TRAVIS_JOB_NAME}"
-#  - echo "TRAVIS_JOB_NUMBER - ${TRAVIS_JOB_NUMBER}"
-  - echo "TRAVIS_BUILD_NUMBER - ${TRAVIS_BUILD_NUMBER}"
-  - env
   - |-
+      echo Prepare
+      export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
+      export BRANCH_NAME="${TRAVIS_BRANCH}"
+  - |-
+      echo Release Prepare
       if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-        export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
-        export BRANCH_NAME="${TRAVIS_BRANCH}"
+        ./gradlew --console=plain --stacktrace dmpkitReleaseInit
       fi
-  - echo "$BUILD_NUMBER   $BRANCH_NAME"
-#  - ./gradlew --console=plain --stacktrace dmpkitReleaseInit
-#  - ./gradlew --console=plain --stacktrace test
-#  - ./gradlew --console=plain --stacktrace itest
-#  - ./gradlew --console=plain --stacktrace check -x test -x itest
-#  - ./gradlew --console=plain --stacktrace jar
-#  - ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
-##  - ./gradlew --console=plain --stacktrace publish
+  - |-
+      echo Test
+      ./gradlew --console=plain --stacktrace test
+  - |-
+      echo Integration Test
+      ./gradlew --console=plain --stacktrace itest
+  - |-
+      echo Code Quality
+      ./gradlew --console=plain --stacktrace check -x test -x itest
+  - |-
+      echo Build
+      ./gradlew --console=plain --stacktrace jar
+  - |-
+      echo Release Finish
+      ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
+      ./gradlew --console=plain --stacktrace publish
