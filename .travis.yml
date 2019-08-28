@@ -42,8 +42,8 @@ script:
       export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
       export BRANCH_NAME="${TRAVIS_BRANCH}"
   - |-
-      echo Release Prepare
       if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+        echo Release Prepare
         ./gradlew --console=plain --stacktrace dmpkitReleaseInit
       fi
   - |-
@@ -59,6 +59,8 @@ script:
       echo Build
       ./gradlew --console=plain --stacktrace jar
   - |-
-      echo Release Finish
-      ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
-      ./gradlew --console=plain --stacktrace publish
+      if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+        echo Release Finish
+        ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
+        ./gradlew --console=plain --stacktrace publish
+      fi
