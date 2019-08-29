@@ -36,11 +36,8 @@ cache:
 git:
   depth: false
 
-env:
-  - BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}" BRANCH_NAME="${TRAVIS_BRANCH}"
-
 script:
-  - echo $BUILD_NUMBER $BRANCH_NAME
+  - export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}" BRANCH_NAME="${TRAVIS_BRANCH}"
   - |-
       if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
         ./gradlew --console=plain --stacktrace dmpkitReleaseInit
