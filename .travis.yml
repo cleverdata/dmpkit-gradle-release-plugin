@@ -12,6 +12,8 @@
 # limitations under the License.
 #
 
+if: tag IS blank
+
 language: java
 
 install: true
@@ -34,8 +36,12 @@ cache:
 git:
   depth: false
 
+env:
+  - BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}"
+  - BRANCH_NAME="${TRAVIS_BRANCH}"
+
 script:
-  - export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}" BRANCH_NAME="${TRAVIS_BRANCH}"
+  - echo $BUILD_NUMBER $BRANCH_NAME
   - |-
       if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
         ./gradlew --console=plain --stacktrace dmpkitReleaseInit
