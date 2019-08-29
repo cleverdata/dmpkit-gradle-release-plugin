@@ -222,7 +222,7 @@ gradlePlugin {
     plugins {
         // using dmpkitGradleRelease instead of dmpkitRelease as we are applying this plugin to itself
         dmpkitGradleRelease {
-            id = 'dmpkit-gradle-release'
+            id = 'dmpkit-release'
             implementationClass = 'io.dmpkit.gradle.plugin.release.ReleasePlugin'
         }
     }
@@ -244,14 +244,14 @@ gradle.taskGraph.whenReady { taskGraph ->
             task.doFirst {
                 def gpgDir = "${buildDir}/gnupg"
                 if (!file("${gpgDir}/secring.gpg").exists()) {
-                    mkdir "${buildDir}/gnupg"
+                    mkdir gpgDir
                     file("${gpgDir}/secring.gpg").with {
                         deleteOnExit()
-                        bytes = project.findProperty("secretKeyRing").decodeBase64()
+                        bytes = project.findProperty('secretKeyRing').decodeBase64()
                     }
-                    project.ext."signing.keyId" = project.findProperty("secretKeyId")
-                    project.ext."signing.secretKeyRingFile" = "${gpgDir}/secring.gpg"
-                    project.ext."signing.password" = project.findProperty("signingPassword")
+                    project.ext.'signing.keyId' = project.findProperty('secretKeyId')
+                    project.ext.'signing.secretKeyRingFile' = "${gpgDir}/secring.gpg"
+                    project.ext.'signing.password' = project.findProperty('signingPassword')
                 }
             }
         }
