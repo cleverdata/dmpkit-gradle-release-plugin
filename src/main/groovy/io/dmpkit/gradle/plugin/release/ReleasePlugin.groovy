@@ -26,7 +26,7 @@ class ReleasePlugin implements Plugin<Project> {
     private static final String GRADLE_PROPS = 'gradle.properties';
 
     @SuppressWarnings("GroovyUnusedDeclaration")
-    public static class ReleasePluginExtension {
+    static class ReleasePluginExtension {
         // settings that can be set from within a build script
         public String snapshotSuffix = '-SNAPSHOT'
         public String envBuildNumber
