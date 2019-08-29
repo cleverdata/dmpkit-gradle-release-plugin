@@ -277,7 +277,7 @@ class ReleasePlugin implements Plugin<Project> {
     private static void ensureReleaseBranch(Task task) {
         String currBranch = task.project[EXTENSION].currentBranch()
         String releaseBranch = task.project[EXTENSION].releaseBranch()
-        if (!currBranch.equals(releaseBranch)) {
+        if (currBranch != releaseBranch) {
             throw new TaskExecutionException(task, new IllegalStateException(
                 "Not on the release branch: [current: ${currBranch}, expected: ${releaseBranch}]"))
         }
