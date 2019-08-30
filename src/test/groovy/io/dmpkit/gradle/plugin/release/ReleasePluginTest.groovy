@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.nullValue
 
 class ReleasePluginTest {
 
-    private static final String PLUGIN_NAME = 'dmpkit-gradle-release'
+    private static final String PLUGIN_NAME = 'dmpkit-release'
 
     @DataProvider
     private Object[][] tasks() {[
