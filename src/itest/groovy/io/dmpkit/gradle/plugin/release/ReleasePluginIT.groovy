@@ -629,7 +629,7 @@ class ReleasePluginIT {
 
         String buildScript = """
             plugins {
-                id 'dmpkit-gradle-release'
+                id 'dmpkit-release'
             }
         """
         Files.write(dir.resolve('build.gradle'), buildScript.getBytes(StandardCharsets.UTF_8))
