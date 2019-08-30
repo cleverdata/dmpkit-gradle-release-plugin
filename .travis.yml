@@ -37,6 +37,8 @@ git:
   depth: false
 
 script:
+  # fail fast (https://github.com/travis-ci/travis-ci/issues/1066)
+  - set -e
   - export BUILD_NUMBER="${TRAVIS_BUILD_NUMBER}" BRANCH_NAME="${TRAVIS_BRANCH}"
   - |-
       if [[ "${TRAVIS_BRANCH}" == "master" && "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
@@ -51,3 +53,4 @@ script:
         ./gradlew --console=plain --stacktrace dmpkitReleaseFinish
         ./gradlew --console=plain --stacktrace publish
       fi
+  - set +e
